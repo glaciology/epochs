@@ -101,7 +101,7 @@ const byte BAT_CNTRL          = 22;       // Drive HIGH to enable voltage divide
 // SdFat and arducam_mega both call SPI.beginTransaction() internally,
 // so there is no conflict as long as CS lines are never overlapped.
 // MHZ: 24
-#define SD_CONFIG SdSpiConfig(PIN_SD_CS, SHARED_SPI, SD_SCK_MHZ(24), &SPI)
+#define SD_CONFIG SdSpiConfig(PIN_SD_CS, SHARED_SPI, SD_SCK_MHZ(8), &SPI)
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  OBJECTS
@@ -145,7 +145,7 @@ float offset_v            = 0.23;
 float shutdownThreshold   = 3.5;     // single-cell LiPo low-voltage cutoff
 
 // GPS / RTC SYNC
-uint32_t gpsSyncTimeoutMs = 1UL * 60UL * 1000UL;  // 1 minute max wait for fix
+uint32_t gpsSyncTimeoutMs = 1UL * 10UL * 1000UL;  // 30 second max wait for fix
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  CONSTANTS
@@ -229,7 +229,7 @@ void setup() {
   configureSD();
   createDebugFile();
   getConfig();
-  //syncRtcFromGps();       // once only; continues on failure (coin cell fallback)
+  syncRtcFromGps();       // once only; continues on failure (coin cell fallback)
   blinkLed(10, 80);       // 10 blinks = setup complete
   DBGLN("Info: SETUP COMPLETE");
 }

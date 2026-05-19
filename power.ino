@@ -5,6 +5,7 @@ void initializeBuses() {
   pinMode(PIN_CAM_CS, OUTPUT);
   pinMode(PIN_SD_CS, OUTPUT);
   digitalWrite(PIN_CAM_CS, HIGH);  // deassert camera CS before SPI bus starts
+  delay(100);
   SPI.begin();
   delay(5);
 }

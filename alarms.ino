@@ -67,7 +67,7 @@ void syncRtcFromGps() {
   unsigned long lastPrint = millis();
   bool synced             = false;
 
-  while (!synced && (millis() - t0 < gpsSyncTimeoutMs)) {
+  while (!synced && (millis() - t0 < (unsigned long)gpsSyncTimeoutMs)) {
     petDog();
 
     while (gpsSerial.available()) {
@@ -123,7 +123,10 @@ void syncRtcFromGps() {
 
   // Put GPS to standby
   gpsSerial.println("$PMTK161,0*28");
+  gpsSerial.println("$PMTK225,4*2F");  // enter backup mode
   gpsSerial.end();
+//  pinMode(GPS_SS_RX, INPUT);   // float RX — stops any leakage through GPS TX line
+//  pinMode(GPS_SS_TX, INPUT);   // float TX
 
   if (!synced) {
     DBGLN("Warning: GPS fix not obtained. Using coin-cell RTC time.");

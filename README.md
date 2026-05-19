@@ -247,17 +247,22 @@ Include the provided `arducam_hal.cpp` in your sketch folder. This resolves C/C+
 **Runtime estimates at 1-hour interval (3s active per cycle, 7000 mAh LiPo):**
 **Without custom PCB, measured photo current 200mA for 3 seconds, 30 mA for sleep**
 
-| Hardware | Avg current | Est. runtime |
-|----------|------------|--------------|
-| Current (Redboard + shield) | ~30.2 mA | ~9.7 days |
-| Custom PCB (target) | ~0.018 mA | ~44 years |
+| State | Current Draw |
+|-------|-------------|
+| Active capture cycle | ~160 mA for ~3 seconds |
+| Sleep (current hardware) | ~9 mA (SD card + GPS quiescent draw) |
+| Sleep (custom PCB target) | ~2 μA (SD card and GPS switched off via MOSFET) |
 
-**Runtime estimates at 30-minute interval (3s active per cycle, 7000 mAh LiPo):**
+**Runtime estimates (3s active per cycle, 7000 mAh LiPo):**
 
-| Hardware | Avg current | Est. runtime |
-|----------|------------|--------------|
-| Current (Redboard + shield) | ~30.4 mA | ~9.6 days |
-| Custom PCB (target) | ~0.035 mA | ~22 years |
+| Interval | Hardware | Avg current | Est. runtime |
+|----------|----------|------------|--------------|
+| 30 min | Current (Redboard + shield) | ~9.27 mA | ~31 days |
+| 30 min | Custom PCB (target) | ~0.027 mA | ~30 years |
+| 1 hour | Current (Redboard + shield) | ~9.13 mA | ~32 days |
+| 1 hour | Custom PCB (target) | ~0.013 mA | ~60 years |
+| 5 min | Current (Redboard + shield) | ~9.80 mA | ~30 days |
+| 5 min | Custom PCB (target) | ~0.160 mA | ~5 years |
 
 ---
 

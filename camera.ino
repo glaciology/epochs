@@ -5,12 +5,13 @@ void takePhoto() {
   DBGLN("Info: Powering on camera...");
   printDateTime();
   cameraPowerOn();
+//  delay(500);
   petDog();
   cam.reset(); 
-  delay(100);   
+  delay(200);   
   cam.begin();
   petDog();
-  delay(10);
+  delay(500);
 
   // Build filename
   rtc.getTime();
