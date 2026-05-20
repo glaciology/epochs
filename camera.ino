@@ -5,10 +5,9 @@ void takePhoto() {
   DBGLN("Info: Powering on camera...");
   printDateTime();
   cameraPowerOn();
-//  delay(500);
   petDog();
   cam.reset(); 
-  delay(200);   
+  delay(500);   
   cam.begin();
   petDog();
   delay(500);
@@ -21,11 +20,12 @@ void takePhoto() {
           rtc.hour, rtc.minute, rtc.seconds,
           photoCounter);
 
-//  ArducamCamera* camInst = cam.getCameraInstance();
-//  camInst->arducamCameraOp->flushFifo(camInst);
-//  camInst->arducamCameraOp->clearFifoFlag(camInst);
-//  delay(50);
+  ArducamCamera* camInst = cam.getCameraInstance();
+  camInst->arducamCameraOp->flushFifo(camInst);
+  camInst->arducamCameraOp->clearFifoFlag(camInst);
+  delay(50);
 
+  cam.setManualFocus(0);  // 0 = infinity
   cam.setAutoWhiteBalance(TRUE);                    // TRUE = auto, FALSE = manual
 //  cam.setAutoWhiteBalanceMode(CAM_WHITE_BALANCE_AUTO); // AUTO, SUNNY, CLOUDY, OFFICE, HOME
 //  cam.setAutoExposure(TRUE);                        // TRUE = auto

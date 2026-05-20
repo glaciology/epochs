@@ -5,7 +5,7 @@
 /*
   Expected CONFIG.TXT format (one setting per line, key=value):
 
-    LOG_MODE(1=interval,2=season)=1
+    LOG_MODE(1-interval,2-season)=1
     PHOTO_INTERVAL_S(mode1,>=30)=60
     SUMMER_INTERVAL_S(mode2,>=30)=60
     WINTER_INTERVAL_S(mode2,>=30)=3600
@@ -70,7 +70,7 @@ void createDefaultConfig() {
     DBGLN("Warning: Could not create CONFIG.TXT.");
     return;
   }
-  configFile.println("LOG_MODE(1=interval,2=season)=1");
+  configFile.println("LOG_MODE(1-interval,2-season)=1");
   configFile.println("PHOTO_INTERVAL_S(mode1,min30s)=10");
   configFile.println("SUMMER_INTERVAL_S(mode2,min30s)=60");
   configFile.println("WINTER_INTERVAL_S(mode2,min30s)=3600");
