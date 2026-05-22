@@ -83,8 +83,8 @@ const byte PIN_SD_CS          = 10;       // Shield hard-wired default
 
 // --- ArduCAM Mega — any free GPIO works; D4 used here as a safe default ---
 // Avoid D0/D1 (Serial), D7/D8 (GPS SoftwareSerial), D10 (SD CS), D11-D13 (SPI).
-const byte PIN_CAM_CS         = 4;        // *** change to D2, D3, or D4 as needed ***
-const byte PIN_CAM_POWER      = 3;        // GPIO to switch camera Vcc (active HIGH = on)
+const byte PIN_CAM_CS         = 4;        // 
+const byte PIN_CAM_POWER      = 3;        // GPIO to switch camera Vcc (active HIGH = on). Note this is pad 4. 
 
 // --- Onboard LED ---
 const byte LED                = 19;       // Redboard Artemis built-in LED

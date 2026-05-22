@@ -3,12 +3,17 @@
 // ─────────────────────────────────────────────────────────────────────────────
 void takePhoto() {
   DBGLN("Info: Powering on camera...");
+  digitalWrite(PIN_SD_CS,  HIGH);  // explicitly deassert SD before any camera work
+  digitalWrite(PIN_CAM_CS, HIGH);  // camera also deasserted until we need it
   printDateTime();
   cameraPowerOn();
+  DBGLN("Info: cam poweron");
   petDog();
   cam.reset(); 
+  DBGLN("Info: cam reset");
   delay(500);   
   cam.begin();
+  DBGLN("Info: cam begin");
   petDog();
   delay(500);
 

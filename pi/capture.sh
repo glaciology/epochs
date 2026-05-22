@@ -58,9 +58,9 @@ if [ "$HALT_AFTER_CAPTURE" -eq 1 ] && [ ! -f /boot/firmware/MAINTENANCE ]; then
     else
         echo "[$TIMESTAMP] halting after FAILED capture (will retry next cycle)" >> "$LOG"
     fi
-    #sleep 0.5
-    #sudo gpioset gpiochip0 4=0
-    #sleep 5
+    # sleep 0.5
+    sudo gpioset gpiochip0 4=0
+    sleep 3
     sudo poweroff
 else
     if [ -f /boot/firmware/MAINTENANCE ]; then
