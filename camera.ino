@@ -6,7 +6,10 @@ void takePhoto() {
   digitalWrite(PIN_SD_CS,  HIGH);  // explicitly deassert SD before any camera work
   digitalWrite(PIN_CAM_CS, HIGH);  // camera also deasserted until we need it
   printDateTime();
+  cameraPowerOff();
+  delay(100);
   cameraPowerOn();
+  delay(500);
   DBGLN("Info: cam poweron");
   petDog();
   cam.reset(); 
@@ -27,11 +30,16 @@ void takePhoto() {
 
   ArducamCamera* camInst = cam.getCameraInstance();
   camInst->arducamCameraOp->flushFifo(camInst);
+  DBGLN("Info: flushFifo done");
   camInst->arducamCameraOp->clearFifoFlag(camInst);
+  camInst->burstFirstFlag = 0;  
+  DBGLN("Info: clearFifo done");
   delay(50);
 
   cam.setManualFocus(0);  // 0 = infinity
+  DBGLN("Info: setManualFocus done");
   cam.setAutoWhiteBalance(TRUE);                    // TRUE = auto, FALSE = manual
+  DBGLN("Info: setAWB done");
 //  cam.setAutoWhiteBalanceMode(CAM_WHITE_BALANCE_AUTO); // AUTO, SUNNY, CLOUDY, OFFICE, HOME
 //  cam.setAutoExposure(TRUE);                        // TRUE = auto
 //  cam.setAutoISOSensitive(TRUE);                    // TRUE = auto ISO
@@ -88,6 +96,11 @@ void takePhoto() {
     closeFailCounter++;
   }
   cameraPowerOff();
+
+  // Ensure FIFO state is clean for next cycle
+  camInst->receivedLength = 0;
+  camInst->totalLength    = 0;
+  camInst->burstFirstFlag = 0;
 
   if (ok) {
     photoCounter++;
