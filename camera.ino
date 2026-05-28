@@ -6,10 +6,10 @@ void takePhoto() {
   digitalWrite(PIN_SD_CS,  HIGH);  // explicitly deassert SD before any camera work
   digitalWrite(PIN_CAM_CS, HIGH);  // camera also deasserted until we need it
   printDateTime();
-//  cameraPowerOff();
-//  delay(2000);
-//  cameraPowerOn();
-//  delay(1000);
+  cameraPowerOff();
+  delay(1000);
+  cameraPowerOn();
+  delay(500);
   petDog();
   cam.reset(); 
   delay(500);   
@@ -70,10 +70,11 @@ void takePhoto() {
 
   // Drain FIFO to SD in chunks using readBuff()
   const uint16_t CHUNK = 64;
-  static uint8_t buf[CHUNK];
   bool ok = true;
+  uint32_t bytesWritten = 0;
 
   printDateTime();
+  memset(buf, 0, sizeof(buf));  // zero before drain loop, not inside it
   while (cam.getReceivedLength() > 0) {
 //    petDog();
     uint16_t toRead = (cam.getReceivedLength() >= CHUNK) ? CHUNK : (uint16_t)cam.getReceivedLength();    cam.readBuff(buf, toRead);
@@ -83,6 +84,15 @@ void takePhoto() {
       ok = false;
       break;
     }
+    bytesWritten += toRead;
+  }
+
+  // Sanity check — did we write what the camera said was there?
+  if (ok && bytesWritten != imgLen) {
+    DBG("Warning: bytesWritten="); DBG(bytesWritten);
+    DBG(" != imgLen="); DBGLN(imgLen);
+    // Don't fail — image may still be valid — but log it
+    logDebug("CAM_LEN_MISMATCH");
   }
 
   imageFile.sync();

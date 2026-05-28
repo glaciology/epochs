@@ -160,6 +160,7 @@ volatile bool wdtFlag         = false;
 volatile bool alarmFlag       = true;   // true on boot so we take a photo immediately
 bool          summerMode      = false;  // updated each wake cycle in mode 2
 
+uint8_t buf[64];
 uint32_t      cachedChipId    = 0;
 char          debugFileName[20] = "";
 char          line[120];
@@ -199,10 +200,17 @@ struct {
 // ─────────────────────────────────────────────────────────────────────────────
 extern "C" void am_watchdog_isr(void) {
   wdt.clear();
-  if (wdtCounter < 5) wdt.restart();
   wdtFlag = true;
   wdtCounter++;
   if (wdtCounter > wdtCounterMax) wdtCounterMax = wdtCounter;
+
+  if (wdtCounter < 5) {
+    wdt.restart();  // extend — not fatal yet, just pet and continue
+  } else {
+    // Fatal reset incoming — clean up camera and SPI before hardware reset fires
+    deinitializeBuses();
+    // No wdt.restart() — hardware reset fires on next tick
+  }
 }
 
 extern "C" void am_rtc_isr(void) {
@@ -246,7 +254,6 @@ void loop() {
     printDateTime();
     
     if (!online.uSD) {
-      cameraPowerOn();
       initializeBuses(); 
       configureSD();
     } 

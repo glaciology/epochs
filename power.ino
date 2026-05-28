@@ -2,9 +2,10 @@
 //  BUS INIT / DEINIT
 // ─────────────────────────────────────────────────────────────────────────────
 void initializeBuses() {
+  cameraPowerOn();
   pinMode(PIN_CAM_CS, OUTPUT);
   pinMode(PIN_SD_CS, OUTPUT);
-  digitalWrite(PIN_CAM_CS, HIGH);  // deassert camera CS before SPI bus starts
+  digitalWrite(PIN_CAM_CS, LOW);  // deassert camera CS before SPI bus starts
   digitalWrite(PIN_SD_CS,  HIGH);  // deassert SD on SPI bus
   delay(100);
   SPI.begin();
@@ -13,6 +14,11 @@ void initializeBuses() {
 
 void deinitializeBuses() {
   SPI.end();
+  delay(50);
+  digitalWrite(11,          LOW);
+  digitalWrite(13,           LOW);
+  digitalWrite(PIN_CAM_CS,    LOW);
+  digitalWrite(PIN_SD_CS,     LOW);
   online.uSD = false;
   online.cam = false;
   cameraPowerOff();
@@ -41,6 +47,10 @@ void goToSleep() {
 
   power_adc_disable();
   digitalWrite(LED, LOW);
+//  digitalWrite(11,          LOW);
+//  digitalWrite(13,           LOW);
+//  digitalWrite(PIN_CAM_CS,    LOW);
+//  digitalWrite(PIN_SD_CS,     LOW);
 
   am_hal_pwrctrl_periph_disable(AM_HAL_PWRCTRL_PERIPH_IOM0);
   am_hal_pwrctrl_periph_disable(AM_HAL_PWRCTRL_PERIPH_IOM1);
