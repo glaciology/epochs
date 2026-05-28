@@ -28,7 +28,7 @@
 #include <SPI.h>
 
 // ── Must match PIN_CAM_CS in CamLogger.ino ──────────────────────────────────
-static const uint8_t CAM_CS_PIN = 4;   // *** keep in sync with CamLogger.ino ***
+static const uint8_t CAM_CS_PIN = 4;   // *** keep in sync with epochs.ino ***
 
 // ── HAL symbols exported to C linkage ───────────────────────────────────────
 extern "C" {

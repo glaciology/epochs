@@ -15,6 +15,7 @@ void deinitializeBuses() {
   SPI.end();
   online.uSD = false;
   online.cam = false;
+  cameraPowerOff();
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -23,7 +24,7 @@ void deinitializeBuses() {
 void cameraPowerOn() {
   pinMode(PIN_CAM_POWER, OUTPUT);
   digitalWrite(PIN_CAM_POWER, HIGH);
-  delay(100);   // allow sensor to stabilise
+  delay(300);   // allow sensor to stabilise
 }
 
 void cameraPowerOff() {

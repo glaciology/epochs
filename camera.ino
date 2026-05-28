@@ -1,22 +1,19 @@
-// ─────────────────────────────────────────────────────────────────────────────
-//  TAKE PHOTO AND SAVE TO SD
-// ─────────────────────────────────────────────────────────────────────────────
+//// ─────────────────────────────────────────────────────────────────────────────
+////  TAKE PHOTO AND SAVE TO SD
+//// ─────────────────────────────────────────────────────────────────────────────
 void takePhoto() {
   DBGLN("Info: Powering on camera...");
   digitalWrite(PIN_SD_CS,  HIGH);  // explicitly deassert SD before any camera work
   digitalWrite(PIN_CAM_CS, HIGH);  // camera also deasserted until we need it
   printDateTime();
-  cameraPowerOff();
-  delay(100);
-  cameraPowerOn();
-  delay(500);
-  DBGLN("Info: cam poweron");
+//  cameraPowerOff();
+//  delay(2000);
+//  cameraPowerOn();
+//  delay(1000);
   petDog();
   cam.reset(); 
-  DBGLN("Info: cam reset");
   delay(500);   
   cam.begin();
-  DBGLN("Info: cam begin");
   petDog();
   delay(500);
 
@@ -30,14 +27,14 @@ void takePhoto() {
 
   ArducamCamera* camInst = cam.getCameraInstance();
   camInst->arducamCameraOp->flushFifo(camInst);
-  DBGLN("Info: flushFifo done");
   camInst->arducamCameraOp->clearFifoFlag(camInst);
   camInst->burstFirstFlag = 0;  
-  DBGLN("Info: clearFifo done");
+  camInst->receivedLength = 0;
+  camInst->totalLength    = 0;
+  camInst->arducamCameraOp->flushFifo(camInst);
   delay(50);
 
   cam.setManualFocus(0);  // 0 = infinity
-  DBGLN("Info: setManualFocus done");
   cam.setAutoWhiteBalance(TRUE);                    // TRUE = auto, FALSE = manual
   DBGLN("Info: setAWB done");
 //  cam.setAutoWhiteBalanceMode(CAM_WHITE_BALANCE_AUTO); // AUTO, SUNNY, CLOUDY, OFFICE, HOME
@@ -61,14 +58,12 @@ void takePhoto() {
 
   if (imgLen == 0) {
     DBGLN("Warning: Zero length image.");
-    cameraPowerOff();
     logDebug("CAM_ZERO_LEN");
     return;
   }
 
   if (!imageFile.open(imgFileName, O_CREAT | O_WRITE | O_TRUNC)) {
     DBGLN("Warning: Failed to open image file.");
-    cameraPowerOff();
     logDebug("CAM_FILE_ERR");
     return;
   }
@@ -95,7 +90,6 @@ void takePhoto() {
     DBGLN("Warning: image file close failed.");
     closeFailCounter++;
   }
-  cameraPowerOff();
 
   // Ensure FIFO state is clean for next cycle
   camInst->receivedLength = 0;

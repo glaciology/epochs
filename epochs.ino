@@ -246,6 +246,7 @@ void loop() {
     printDateTime();
     
     if (!online.uSD) {
+      cameraPowerOn();
       initializeBuses(); 
       configureSD();
     } 
